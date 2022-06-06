@@ -1,7 +1,4 @@
-﻿using EcommerceShop.Core.Model;
-using EcommerceShop.Core.Repository;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿
 
 namespace EcommerceShop.Api.Controllers
 {
@@ -9,9 +6,9 @@ namespace EcommerceShop.Api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IBaseRepository<Product>  _ibaseRepository;
+        private readonly IProductRepository  _ibaseRepository;
 
-        public ProductController(IBaseRepository<Product> ibaseRepository)
+        public ProductController(IProductRepository ibaseRepository)
         {
             _ibaseRepository = ibaseRepository;
         }
@@ -25,7 +22,7 @@ namespace EcommerceShop.Api.Controllers
             
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
 
         public async Task<IActionResult> GetProduct(int id)
         {
@@ -36,5 +33,18 @@ namespace EcommerceShop.Api.Controllers
             }
             return Ok(book);
         }
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            return Ok(await _ibaseRepository.GetAllProductBrand());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes()
+        {
+            return Ok(await _ibaseRepository.GetAllProductType());
+        }
+
+
     }
 }

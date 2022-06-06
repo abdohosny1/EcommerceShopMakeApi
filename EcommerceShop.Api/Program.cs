@@ -1,7 +1,4 @@
-using EcommerceShop.Core.Repository;
-using EcommerceShop.EF;
-using EcommerceShop.EF.Repositories;
-using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(
 
 //add service
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,5 +33,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+ApplicatioContextSeeding.Seed(app);
 
 app.Run();
