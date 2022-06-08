@@ -1,8 +1,14 @@
 
 
+
+using EcommerceShop.Api.Errors;
+using EcommerceShop.Api.Extensision;
+using EcommerceShop.Api.MiddleWare;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 
 //add dbcontext
 var connection = builder.Configuration.GetConnectionString("DefultConnection");
@@ -10,26 +16,30 @@ builder.Services.AddDbContext<ApplicationDBContext>(
     op => op.UseSqlServer(connection,
            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
 
-//add service
-builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-builder.Services.AddControllers();
+//add auto maper service
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+//add extesnsison service
+builder.Services.AddApplicationService();
+builder.Services.AddSwaggerDocumantion();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExpectionMiddelWare>();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+// app.UseDeveloperExceptionPage();
+app.UseSweggerDoc();
+
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();

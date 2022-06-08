@@ -1,48 +1,88 @@
 ﻿
 
+using EcommerceShop.Api.Dto;
+
+
 namespace EcommerceShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseApiController
     {
-        private readonly IProductRepository  _ibaseRepository;
+        private readonly IBaseRepository<Product> _productRepository;
+        private readonly IBaseRepository<ProductBrand> _brandRepository;
+        private readonly IBaseRepository<ProductType> _typeRepository;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository ibaseRepository)
+        public ProductController
+            (IBaseRepository<Product> productRepository, 
+            IBaseRepository<ProductBrand> brandRepository,
+            IBaseRepository<ProductType> typeRepository,
+            IMapper mapper)
         {
-            _ibaseRepository = ibaseRepository;
+            _productRepository = productRepository;
+            _brandRepository = brandRepository;
+            _typeRepository = typeRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
 
         public async Task<IActionResult> GetProducts()
         {
-            var res=await _ibaseRepository.GetAll();
-            return Ok(res);
+            var spec = new ProductWithTypeAndBrand();
+            var res=await _productRepository.GetAllAsync(spec);
+            //var products = res.Select(product => new ProductDto
+            //{
+            //    Id = product.Id,
+            //    Name = product.Name,
+            //    Description = product.Description,
+            //    Price = product.Price,
+            //    PictureUrl = product.PictureUrl,
+            //    ProductBrand = product.ProductBrand.Name,
+            //    ProductType = product.ProductType.Name
+            //}).ToList();
+            var products = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(res);
+            return Ok(products);
             
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
 
         public async Task<IActionResult> GetProduct(int id)
         {
-            var book = await _ibaseRepository.GetById(id);
-            if (book == null)
+            var spec = new ProductWithTypeAndBrand(id);
+
+            var product = await _productRepository.GetEntityWithSpec(spec);
+            if (product == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
-            return Ok(book);
+            //var newProduct = new ProductDto
+            //{
+            //    Id=product.Id,
+            //    Name=product.Name,
+            //    Description=product.Description,
+            //    Price=product.Price,
+            //    PictureUrl=product.PictureUrl,
+            //    ProductBrand=product.ProductBrand.Name,
+            //    ProductType=product.ProductType.Name
+            //};
+            var newProduct = _mapper.Map<Product, ProductDto>(product);
+            return Ok(newProduct);
         }
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
-            return Ok(await _ibaseRepository.GetAllProductBrand());
+            return Ok(await _brandRepository.GetAll());
         }
 
         [HttpGet("types")]
-        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes()
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
-            return Ok(await _ibaseRepository.GetAllProductType());
+            return Ok(await _typeRepository.GetAll());
         }
 
 
