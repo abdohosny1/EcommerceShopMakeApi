@@ -1,7 +1,7 @@
 ﻿
 
 using EcommerceShop.Api.Dto;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceShop.Api.Controllers
 {
@@ -15,7 +15,7 @@ namespace EcommerceShop.Api.Controllers
         private readonly IMapper _mapper;
 
         public ProductController
-            (IBaseRepository<Product> productRepository, 
+            (IBaseRepository<Product> productRepository,
             IBaseRepository<ProductBrand> brandRepository,
             IBaseRepository<ProductType> typeRepository,
             IMapper mapper)
@@ -28,28 +28,35 @@ namespace EcommerceShop.Api.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> GetProducts()
+        ////public async Task<ActionResult<Paganition<ProductDto>>> GetProducts([FromQuery]ProductSpecParams productSpecParams)
+        ////{
+        ////    var spec = new ProductWithTypeAndBrand(productSpecParams);
+        ////    var countSpec = new ProductWithFilterForCounterSpecificstion(productSpecParams);
+        ////    var totalItem = await _productRepository.CountAsunc(spec);
+
+        ////    var res=await _productRepository.GetAllAsync(spec);
+
+        ////    var products = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(res);
+        ////    return Ok(new Paganition<ProductDto>(productSpecParams.PageIndex,productSpecParams.PageSize,totalItem,products));
+
+        ////}
+        ///
+        public async Task<ActionResult<Paganition<ProductDto>>> GetProducts([FromQuery] ProductSpecParams productSpecParams)
         {
-            var spec = new ProductWithTypeAndBrand();
-            var res=await _productRepository.GetAllAsync(spec);
-            //var products = res.Select(product => new ProductDto
-            //{
-            //    Id = product.Id,
-            //    Name = product.Name,
-            //    Description = product.Description,
-            //    Price = product.Price,
-            //    PictureUrl = product.PictureUrl,
-            //    ProductBrand = product.ProductBrand.Name,
-            //    ProductType = product.ProductType.Name
-            //}).ToList();
+            var spec = new ProductWithTypeAndBrand(productSpecParams);
+            var countSpec = new ProductWithFilterForCounterSpecificstion(productSpecParams);
+            var totalItem = await _productRepository.CountAsunc(spec);
+
+            var res = await _productRepository.GetAllAsync(spec);
+
             var products = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductDto>>(res);
-            return Ok(products);
-            
+            return Ok(new Paganition<ProductDto>(productSpecParams.PageIndex, productSpecParams.PageSize, totalItem, products));
+
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 
         public async Task<IActionResult> GetProduct(int id)
         {

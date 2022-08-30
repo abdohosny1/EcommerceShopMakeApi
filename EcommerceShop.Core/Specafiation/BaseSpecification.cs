@@ -12,10 +12,10 @@ namespace EcommerceShop.Core.Specafiation
 
         public BaseSpecification() { }
 
-        public BaseSpecification(Expression<Func<T, bool>> criteria )
+        public BaseSpecification(Expression<Func<T, bool>> criteria)
         {
             Criteria = criteria;
-           
+
         }
 
 
@@ -23,11 +23,38 @@ namespace EcommerceShop.Core.Specafiation
 
         public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
 
-        protected void AddInclude(Expression<Func<T,object>> includeExpersion)
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDes { get; private set; }
+
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPagingEnable { get; private set; }
+
+        protected void AddInclude(Expression<Func<T, object>> includeExpersion)
         {
             Includes.Add(includeExpersion);
         }
 
+        protected void AddOrderBy(Expression<Func<T, object>> orderbyExpersion)
+        {
+            OrderBy = orderbyExpersion;
+        }
+
+        protected void AddOrderByDEs(Expression<Func<T, object>> orderbyExpersion)
+        {
+            OrderByDes = orderbyExpersion;
+        }
+
+
+        protected void ApplyPaging(int take, int skip)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnable = true;
+        }
 
 
 

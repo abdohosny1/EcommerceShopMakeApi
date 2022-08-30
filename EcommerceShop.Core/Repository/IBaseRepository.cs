@@ -12,6 +12,7 @@ namespace EcommerceShop.Core.Repository
         Task<T> GetById(int id);    
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> GetAllAsync(ISpecification<T> spec);
+        Task<int> CountAsunc(ISpecification<T> spec);
 
     }
 }
