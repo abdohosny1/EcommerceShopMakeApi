@@ -6,6 +6,8 @@
         {
             services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
+
 
             services.Configure<ApiBehaviorOptions>(
           op => {
