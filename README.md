@@ -1,6 +1,8 @@
 EcommerceShop
-اهلا مستر خالد
-اريد ان اخبرك موجزعن فيلم
 
-يقدم الفيلم قصة منفصلة عن سلسلة أفلام The Fast and The Furious، حيث يقرر عميل اﻷمن الدبلوماسي اﻷمريكي (لوك هوبس) بالتحالف  مع المنبوذ (ديكارد شاو) لكي يواجهها معًا شرير محسن جينيًا يهدد مستقبل الإنسانية
-بدايه الفيلم حيث تقوم الاستخبارات البريطانيه بالهجوم علي العصابة واخد فيرس ندفه الثلج
+
+hello mr khalid
+I want to tell you about a movie
+
+The film presents a separate story from the series The Fast and The Furious, in which a US diplomatic security agent (Luke Hobbs) decides to team up with an outcast (Deckard Shaw) in order to confront them together with a genetically enhanced evil that threatens the future of humanity.
+The beginning of the movie, where British intelligence attacks the gang and takes the snowflake virus
