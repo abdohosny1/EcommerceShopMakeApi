@@ -9,3 +9,5 @@ global using EcommerceShop.Api.Dto;
 global using EcommerceShop.Api.Helpers;
 global using EcommerceShop.Api.Errors;
 global using EcommerceShop.Core.Specafiation;
+global using System.ComponentModel.DataAnnotations;
+

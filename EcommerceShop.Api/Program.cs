@@ -4,7 +4,11 @@
 using EcommerceShop.Api.Errors;
 using EcommerceShop.Api.Extensision;
 using EcommerceShop.Api.MiddleWare;
+using EcommerceShop.Core.Model.sendingEmail;
+using EcommerceShop.Core.Model.sendSMS;
+using EcommerceShop.EF.Identity;
 using StackExchange.Redis;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(
            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
 
 
+
+/// add dbcontext for identity
+builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+{
+    x.UseSqlServer(builder.Configuration.GetConnectionString("IdenetityConnection"));
+}
+    );
+
 //add readis
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
@@ -35,10 +47,21 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+// add token
+builder.Services.Configure<Tokenn>(builder.Configuration.GetSection("Token"));
+
+// sending emaill
+builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
+
+//add Twillio
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+
 
 //add extesnsison service
 builder.Services.AddApplicationService();
+builder.Services.AddIdentityService(builder.Configuration);
 builder.Services.AddSwaggerDocumantion();
+
 
 //add cors
 builder.Services.AddCors(options =>
@@ -55,7 +78,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ExpectionMiddelWare>();
+//app.UseMiddleware<ExpectionMiddelWare>();
 // Configure the HTTP request pipeline.
 
 // app.UseDeveloperExceptionPage();
@@ -65,11 +88,14 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseAuthorization();
 app.UseCors(text);
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapControllers();
 ApplicatioContextSeeding.Seed(app);
+//AppIdentityContextSeeding.SeedUsersAndRolesAsync(app).Wait();
 
 app.Run();

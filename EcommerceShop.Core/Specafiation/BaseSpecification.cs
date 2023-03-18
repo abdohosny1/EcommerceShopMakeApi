@@ -43,9 +43,9 @@ namespace EcommerceShop.Core.Specafiation
             OrderBy = orderbyExpersion;
         }
 
-        protected void AddOrderByDEs(Expression<Func<T, object>> orderbyExpersion)
+        protected void AddOrderByDEs(Expression<Func<T, object>> orderbyExpersionDes)
         {
-            OrderByDes = orderbyExpersion;
+            OrderByDes = orderbyExpersionDes;
         }
 
 

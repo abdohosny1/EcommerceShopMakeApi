@@ -8,11 +8,13 @@ namespace EcommerceShop.Api.Controllers
     public class BasketController : ControllerBase
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IMapper _mapper;
 
-        public BasketController(IBasketRepository basketRepository)
+
+        public BasketController(IBasketRepository basketRepository, IMapper mapper)
         {
             _basketRepository = basketRepository;
-
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -24,9 +26,11 @@ namespace EcommerceShop.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket customerBasket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket(BasketDto basket)
         {
-            var basket = await _basketRepository.UpdateBasketAsync(customerBasket);
+            var custombasket = _mapper.Map<BasketDto,CustomerBasket>(basket);
+
+            var updateBasket = await _basketRepository.UpdateBasketAsync(custombasket);
             return Ok(basket);
         }
 

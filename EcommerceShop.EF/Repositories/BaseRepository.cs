@@ -17,7 +17,7 @@ namespace EcommerceShop.EF.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IReadOnlyList<T>> GetAll()
         {
             var res = await _dbContext.Set<T>().ToListAsync();
 
@@ -49,6 +49,32 @@ namespace EcommerceShop.EF.Repositories
         public async Task<int> CountAsunc(ISpecification<T> spec)
         {
             return await ApplaySpecification(spec).CountAsync();
+        }
+
+        public void Add(T entity)
+        {
+            _dbContext.Set<T>().Add(entity);
+          //  _dbContext.SaveChanges();
+        }
+        public async Task<T> AddAsync(T entity)
+        {
+            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public void Update(T entity)
+        {
+            _dbContext.Set<T>().Attach(entity);
+            _dbContext.Entry(entity).State= EntityState.Modified;
+            _dbContext.SaveChanges();
+        }
+
+        public void Delete(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            _dbContext.SaveChanges();
+
         }
     }
 }

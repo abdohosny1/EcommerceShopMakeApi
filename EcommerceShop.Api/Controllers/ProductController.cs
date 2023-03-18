@@ -1,6 +1,7 @@
 ﻿
 
 using EcommerceShop.Api.Dto;
+using EcommerceShop.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceShop.Api.Controllers
@@ -26,6 +27,7 @@ namespace EcommerceShop.Api.Controllers
             _mapper = mapper;
         }
 
+        [Cached(600)]
         [HttpGet]
 
         ////public async Task<ActionResult<Paganition<ProductDto>>> GetProducts([FromQuery]ProductSpecParams productSpecParams)
@@ -54,6 +56,8 @@ namespace EcommerceShop.Api.Controllers
 
         }
 
+        [Cached(600)]
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -80,12 +84,15 @@ namespace EcommerceShop.Api.Controllers
             var newProduct = _mapper.Map<Product, ProductDto>(product);
             return Ok(newProduct);
         }
+        [Cached(600)]
+
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
             return Ok(await _brandRepository.GetAll());
         }
 
+        [Cached(600)]   
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {

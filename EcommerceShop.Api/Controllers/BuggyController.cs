@@ -1,4 +1,5 @@
 ﻿using EcommerceShop.Api.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,13 @@ namespace EcommerceShop.Api.Controllers
             
             return Ok();
         }
+        [HttpGet("TestAuth")]
+        [Authorize]
+        public ActionResult<String> GetScretText()
+        {
+            return "secret stuff";
+        }
+       
 
         [HttpGet("servererror")]
         public IActionResult GetServerErrort()
