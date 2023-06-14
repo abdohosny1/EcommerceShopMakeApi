@@ -1,6 +1,8 @@
 ﻿
+using EcommerceShop.Core.Model.identity;
 using EcommerceShop.Core.Model.OrderAggragate;
 using EcommerceShop.EF.Configure;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace EcommerceShop.EF
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<AppUser>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {

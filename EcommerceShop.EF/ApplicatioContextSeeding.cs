@@ -86,7 +86,8 @@ namespace EcommerceShop.EF
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDBContext>();
-
+                //run migration 
+                //context.Database.Migrate();
                 context.Database.EnsureCreated();
 
                 try

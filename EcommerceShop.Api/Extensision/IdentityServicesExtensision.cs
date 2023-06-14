@@ -16,7 +16,7 @@ namespace EcommerceShop.Api.Extensision
             var bulider = services.AddIdentityCore<AppUser>();
 
             bulider = new IdentityBuilder(bulider.UserType,bulider.Services);
-            bulider.AddEntityFrameworkStores<AppIdentityDbContext>();
+            bulider.AddEntityFrameworkStores<ApplicationDBContext>();
             bulider.AddSignInManager<SignInManager<AppUser>>();
          //  bulider.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 

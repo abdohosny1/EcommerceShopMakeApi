@@ -1,0 +1,55 @@
+version: '3.4'
+
+services:
+  redis:
+    ports:
+      - 6379:6379
+    #command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
+  redis-commander:
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=secret
+    ports:
+      - 8086:8081
+    depends_on:
+      - redis
+
+  orderdb:
+    container_name: orderdb
+    ports:
+       - "6433:1433"
+    environment:
+      SA_PASSWORD: "SwN12345678"
+      ACCEPT_EULA: "Y"
+
+  #Identitydb:
+  #  container_name: Identitydb
+  #  ports:
+  #     - "6432:1433"
+  #  environment:
+  #    SA_PASSWORD: "SwN12345678"
+  #    ACCEPT_EULA: "Y"
+
+  ecommerceshop.api:
+    container_name: ecommerceshopapi
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      #- ASPNETCORE_URLS=https://+:443;http://+:80
+      - "ConnectionStrings:DefultConnection=Server=orderdb;Database=ehome8DB;User Id=sa;Password=SwN12345678"
+      #- "ConnectionStrings:IdenetityConnection=Server=orderdb;Database=ehomeIdentityDB1;Trusted_Connection=True;User Id=sa;Password=SwN12345678"
+      - "ConnectionStrings:Redis=redis"
+    ports:
+       - "8088:80"
+    #volumes:
+      #- ${APPDATA}/Microsoft/UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+      #- ${APPDATA}/ASP.NET/Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
+    depends_on:
+      - orderdb
+
+volumes:
+  redis-data:

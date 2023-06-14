@@ -64,6 +64,7 @@ namespace EcommerceShop.Api.Controllers
 
         public async Task<IActionResult> GetProduct(int id)
         {
+
             var spec = new ProductWithTypeAndBrand(id);
 
             var product = await _productRepository.GetEntityWithSpec(spec);

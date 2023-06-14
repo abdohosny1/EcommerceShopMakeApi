@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+
+  redis:
+      image: redis:latest
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+
+  #Identitydb:
+  #    image: mcr.microsoft.com/mssql/server
+
+  ecommerceshop.api:
+    image: ${DOCKER_REGISTRY-}ecommerceshopapi
+    build:
+      context: .
+      dockerfile: EcommerceShop.Api\Dockerfile

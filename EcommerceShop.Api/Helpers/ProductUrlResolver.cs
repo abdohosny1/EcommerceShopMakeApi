@@ -12,6 +12,7 @@
         {
             if (!string.IsNullOrEmpty(source.PictureUrl))
             {
+
                 return configuration["ApiUrl"]+source.PictureUrl;
             }
             return null;

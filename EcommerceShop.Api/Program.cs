@@ -19,6 +19,8 @@ string text = "";
 // Add services to the container.
 builder.Services.AddControllers();
 
+
+
 //add dbcontext
 var connection = builder.Configuration.GetConnectionString("DefultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(
@@ -28,11 +30,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(
 
 
 /// add dbcontext for identity
-builder.Services.AddDbContext<AppIdentityDbContext>(x =>
-{
-    x.UseSqlServer(builder.Configuration.GetConnectionString("IdenetityConnection"));
-}
-    );
+//builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+//{
+//    x.UseSqlServer(builder.Configuration.GetConnectionString("IdenetityConnection"));
+//}
+//    );
 
 //add readis
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
@@ -82,6 +84,13 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 // app.UseDeveloperExceptionPage();
+
+
+
+//// run migration 
+//using var scope1 = app.Services.CreateScope();
+//var dbContext1 = scope.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
+//dbContext1.Database.Migrate();
 app.UseSweggerDoc();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");

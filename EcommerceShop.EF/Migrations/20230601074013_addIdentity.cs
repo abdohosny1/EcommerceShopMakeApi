@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EcommerceShop.EF.Migrations.AppIdentityDb
+namespace EcommerceShop.EF.Migrations
 {
-    public partial class init : Migration
+    public partial class addIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
